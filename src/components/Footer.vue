@@ -13,30 +13,24 @@
             <li class="nav-item">
               <a
                 class="nav-link text-secondary"
-                href="#topics"
+                href="#activity"
               >特色活動</a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link text-secondary"
-                href="#reviews"
+                href="#restaurant"
               >美食饗宴</a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link text-secondary"
-                href="#contact"
+                href="#hotel"
               >精選住宿</a>
             </li>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="text-center py-2 text-secondary"
-      style="background: #1f1f1f"
-    >
-      Week1 - 台灣旅遊景點導覽
     </div>
   </div>
 </template>

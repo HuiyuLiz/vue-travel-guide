@@ -5,22 +5,22 @@
     :wrap-around="true"
   >
     <Slide
-      v-for="(slide,index) in 9"
-      :key="slide"
+      v-for="item in items"
+      :key="item.RestaurantName"
     >
       <div
         class="carousel__item"
-        style="
-          background-image: url('https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80');
-        "
+        :style="`
+          background-image: url(${item?.Picture?.PictureUrl1 || initImage});
+        `"
       >
-        <div class="text-white">
-          {{ index }}-長角96
+        <div class="text-white text-start">
+          {{ item?.RestaurantName }}
         </div>
         <div class="d-flex justify-content-between align-items-center w-100">
-          <small class="text-white"> 異國料理 </small>
+          <small class="text-white"> {{ item?.Class }}</small>
           <button class="btn btn-dark btn-sm">
-            新北市
+            {{ item?.Address?.substring(0,3) }}
           </button>
         </div>
       </div>
@@ -43,6 +43,12 @@ export default defineComponent({
     Slide,
     Navigation
   },
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => ({
     settings: {
       itemsToShow: 1,
@@ -54,10 +60,11 @@ export default defineComponent({
         snapAlign: 'center'
       },
       1024: {
-        itemsToShow: 5.5,
+        itemsToShow: 4.5,
         snapAlign: 'start'
       }
-    }
+    },
+    initImage: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80'
   }),
   mounted () {
     document.querySelector('.carousel__prev').style.top = 25 + '%'
@@ -81,6 +88,7 @@ export default defineComponent({
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
   overflow: hidden;
+  background-position: center;
   background-size: cover;
   padding: 0.75rem;
   position: relative;
@@ -90,14 +98,14 @@ export default defineComponent({
   &::after {
     position: absolute;
     width: 100%;
-    height: 148px;
+    height: 200px;
     left: 0px;
     right: 0;
     bottom: 0px;
     content: "";
     background: linear-gradient(
       360deg,
-      rgba(0, 0, 0, 0.53) 0%,
+      rgba(0, 0, 0, 0.8) 0%,
       rgba(0, 0, 0, 0) 100%
     );
   }

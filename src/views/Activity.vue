@@ -70,13 +70,20 @@
       </div>
       <div class="row">
         <div class="col-md-12 px-0">
-          <div class="row d-flex justify-content-center">
+          <div class="row d-flex justify-content-start">
             <div
-              v-for="n in 8"
-              :key="n"
+              v-for="activity in activitiesByCity"
+              :key="activity.ActivityID"
               class="col-md-3 mb-4"
             >
-              <Card :show-category="true" />
+              <Card
+                :title="activity.ActivityName"
+                :content="activity"
+                :location="activity.Location"
+                :show-category="true"
+                :show-location="true"
+                @clickHandler="clickHandler"
+              />
             </div>
           </div>
           <div class="d-flex justify-content-center my-5">
@@ -89,16 +96,18 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { ref, computed, onMounted } from 'vue'
 import Card from '@/components/Card'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'Cities',
+  name: 'Activity',
   components: {
     Card,
     Pagination
   },
   setup () {
+    const store = useStore()
     const areas = ref([
       {
         area: '北部'
@@ -154,13 +163,32 @@ export default {
       currentCity.value = city
       console.log(currentCity.value)
     }
+
+    // 取得所有活動資料
+    const getActivityHandler = (city) => {
+      store.dispatch('GET_ACTIVITY_BY_CITY', city)
+    }
+
+    // 活動
+    const activitiesByCity = computed(() => store.getters.activitiesByCity)
+
+    const clickHandler = (content) => {
+      window.open('https://www.google.com/maps/search/' + content.Address, '_blank')
+    }
+
+    onMounted(() => {
+      getActivityHandler('Taipei')
+    })
+
     return {
       selectArea,
       selectCity,
       areas,
       currentArea,
       currentAreas,
-      currentCity
+      currentCity,
+      activitiesByCity,
+      clickHandler
     }
   }
 }

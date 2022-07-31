@@ -1,31 +1,23 @@
 import axios from 'axios'
-import JsSHA from 'jssha'
+import store from '@/store'
+import { getToken } from './auth'
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
-  withCredentials: true,
+  withCredentials: false,
   timeout: 5000
 })
 
-const getAuthorizationHeader = () => {
-  const AppID = process.env.VUE_APP_AppID
-  const AppKey = process.env.VUE_APP_AppKey
-  const GMTString = new Date().toGMTString()
-  const ShaObj = new JsSHA('SHA-1', 'TEXT')
-  ShaObj.setHMACKey(AppKey, 'TEXT')
-  ShaObj.update('x-date: ' + GMTString)
-  const HMAC = ShaObj.getHMAC('B64')
-  const Authorization = 'hmac username=' + AppID + ', algorithm=hmac-sha1, headers=x-date, signature=' + HMAC + ''
-  return { Authorization: Authorization, 'X-Date': GMTString }
-}
 // request interceptor
 service.interceptors.request.use(
-  config => {
-    config.headers = getAuthorizationHeader()
+  (config) => {
+    if (!store.getters.token) {
+      config.headers.authorization = getToken()
+    }
     return config
   },
-  error => {
+  (error) => {
     console.log(error) // for debug
     return Promise.reject(error)
   }
@@ -33,11 +25,11 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(
-  response => {
+  (response) => {
     // Do something with response data
     return response
   },
-  error => {
+  (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 404:

@@ -107,6 +107,7 @@ export default {
   border: 3px solid #F0F0F0;
   box-sizing: border-box;
   border-radius: 34px;
+  opacity: 0;
 }
 
 .search-icon{
@@ -115,6 +116,7 @@ export default {
   position: absolute;
   right: 1.5rem;
   top: .45rem;
+  opacity: 0;
   img{
     width: 100%;
     object-fit: cover;
